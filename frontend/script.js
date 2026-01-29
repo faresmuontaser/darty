@@ -269,8 +269,8 @@ function toggleSidebar() {
         // Rail is 68px. Menu at 80px (outside rail)
         settingsMenu.style.insetInlineStart = '80px';
     } else {
-        // Sidebar is 250px. Menu at 262px (outside sidebar)
-        settingsMenu.style.insetInlineStart = '262px';
+        // Sidebar is 250px. Menu at 265px (outside sidebar)
+        settingsMenu.style.insetInlineStart = '265px';
     }
 }
 

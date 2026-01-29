@@ -49,7 +49,6 @@ button {
     font-family: inherit;
     display: flex;
     align-items: center;
-    justify-content: center;
     cursor: pointer;
     border: none;
     outline: none;
@@ -185,6 +184,7 @@ body {
     margin: 0 auto;
     border-radius: 50%;
     justify-content: center;
+    min-width: 44px;
 }
 
 .gemini-sidebar.collapsed .new-chat-btn .btn-label {
@@ -256,6 +256,7 @@ body {
     margin: 4px auto;
     border-radius: 50%;
     justify-content: center;
+    min-width: 44px;
 }
 
 .gemini-sidebar.collapsed .history-item .chat-title,
@@ -677,13 +678,13 @@ body {
     text-align: center;
 }
 
-.logo-large {
-    font-size: 2.8rem;
-    font-weight: 700;
+.welcome-screen .logo-large {
+    font-size: 2.2rem;
+    font-weight: 550;
     color: var(--text-primary);
-    opacity: 0.12;
+    opacity: 0.3;
     user-select: none;
-    letter-spacing: -1.5px;
+    letter-spacing: -0.02em;
     white-space: nowrap;
 }
 
