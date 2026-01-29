@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 from typing import Optional, Dict, Any
+from dotenv import load_dotenv
 
 
 class ConfigManager:
@@ -23,6 +24,12 @@ class ConfigManager:
         base_path = Path(__file__).parent.absolute()
         self.config_dir = base_path / config_dir
         self.config_file = self.config_dir / "config.json"
+        
+        # Load environment variables from .env file at project root (one level up from backend)
+        project_root = base_path.parent
+        dotenv_path = project_root / ".env"
+        load_dotenv(dotenv_path=dotenv_path)
+        
         self._ensure_config_dir()
     
     def _ensure_config_dir(self) -> None:
@@ -54,10 +61,17 @@ class ConfigManager:
     def get_api_key(self) -> Optional[str]:
         """
         Retrieve the stored OpenAI API key
+        Checks environment variables first, then fallback to config.json
         
         Returns:
             The API key if found, None otherwise
         """
+        # 1. Check environment variable (highest priority)
+        env_key = os.getenv('GOOGLE_API_KEY')
+        if env_key:
+            return env_key
+            
+        # 2. Fallback to config.json
         config = self.load_config()
         return config.get('openai_api_key')
     

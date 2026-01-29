@@ -18,17 +18,29 @@ class DocScraper:
     
     # Educational resources for comprehensive context
     EDUCATIONAL_URLS = [
-        "https://www.educative.io/courses/learn-dart-first-step-to-flutter/an-introduction-to-control-structures",
+        "https://dart.dev/language",
+        "https://docs.flutter.dev/cookbook",
+        "https://docs.flutter.dev/development/ui/widgets-intro",
+        "https://pub.dev/packages",
+        "https://fluttergems.dev/",
+        "https://github.com/solutelabs/awesome-flutter",
+        "https://exercism.org/tracks/dart",
+        "https://medium.com/flutter-community",
+        "https://www.kodeco.com/flutter/articles",
+        "https://github.com/AppFlowy-IO/AppFlowy",
+        "https://dartpad.dev/workshops",
+        "https://www.codewars.com/kata/search/dart",
+        "https://dribbble.com/tags/flutter",
+        "https://jsontodart.com/",
+        "https://flutterstudio.app/",
+        "https://dart.dev/guides/language/language-tour",
+        "https://docs.flutter.dev/get-started/install",
+         "https://www.educative.io/courses/learn-dart-first-step-to-flutter/an-introduction-to-control-structures",
         "https://pub.dev/",
         "https://dart.dev/tutorials",
-        "https://dart.dev/language",
         "https://code.makery.ch/library/topic/dart/",
         "https://dart.dev/docs",
         "https://dart.dev/guides",
-        "https://dart.dev/guides/language/language-tour",
-        "https://docs.flutter.dev/get-started/install",
-        "https://docs.flutter.dev/development/ui/widgets-intro",
-        "https://docs.flutter.dev/cookbook",
     ]
     
     def __init__(self, cache_manager: Optional[CacheManager] = None):
@@ -254,7 +266,7 @@ class DocScraper:
         if documentation.get('educational_resources'):
             context_parts.append("\n## الموارد التعليمية\n")
             
-            for i, resource in enumerate(documentation['educational_resources'][:8], 1):
+            for i, resource in enumerate(documentation['educational_resources'][:25], 1):
                 context_parts.append(f"""
 ### مصدر {i}: {resource['title'][:60]}
 URL: {resource['url']}

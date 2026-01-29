@@ -1,0 +1,3 @@
+@echo off
+echo [STEP 1] Starting Server...
+cmd /k "python backend/main.py || py backend/main.py || echo ERROR: Python not found & pause"

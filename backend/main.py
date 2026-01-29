@@ -7,6 +7,8 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import sys
+import webbrowser
+from threading import Timer
 from pathlib import Path
 
 # Add backend directory to path for imports
@@ -151,7 +153,7 @@ def initialize_tutor():
         
         return jsonify({
             'success': True,
-            'message': 'تم تهيئة الخبير بنجاح! يمكنك الآن طرح الأسئلة',
+            'message': 'تم تهيئة Darty بنجاح! يمكنك الآن طرح الأسئلة',
             'context_loaded': len(documentation_context) > 0
         })
     
@@ -175,7 +177,7 @@ def ask_tutor():
         if not tutor:
             return jsonify({
                 'success': False,
-                'message': 'لم يتم تهيئة الخبير. انقر على "حفظ وتشغيل" أولاً'
+                'message': 'جاري تحضير Darty.. من فضلك انتظر ثواني وجرب تاني'
             }), 400
         
         data = request.get_json()
@@ -379,14 +381,30 @@ def clear_cache():
         }), 500
 
 
+def open_browser():
+    """Opens the browser to the application URL after a short delay"""
+    webbrowser.open("http://localhost:5000")
+
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print("🚀 Dart & Flutter Expert Tutor Server (Google Gemini)")
-    print("="*60)
-    print(f"📁 Working Directory: {os.getcwd()}")
-    print(f"🌐 Server URL: http://localhost:5000")
+    print(f"🚀 Darty Server: http://localhost:5000")
     print(f"🤖 AI Model: Google Gemini 3 Flash")
     print(f"⚙️  API Key Configured: {config_manager.is_configured()}")
     print("="*60 + "\n")
+
+    # Global variables for auto-init
+    if config_manager.is_configured():
+        try:
+            print("Auto-initializing Darty...")
+            api_key = config_manager.get_api_key()
+            # We initialize without full context first to be fast, 
+            # documentation will be loaded on first use or via sync
+            tutor = DartFlutterTutor(api_key, "")
+            print("✓ Darty is ready!")
+        except Exception as e:
+            print(f"✗ Auto-initialization failed: {e}")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Open browser automatically after 1.5 seconds
+    Timer(1.5, open_browser).start()
+    
+    app.run(debug=False, host='0.0.0.0', port=5000)

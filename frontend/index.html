@@ -3,155 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خبير Dart & Flutter - مدعوم بـ Google Gemini</title>
+    <title>Darty - Dart & Flutter Expert</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1 class="title">
-                    <span class="emoji">🎯</span>
-                    خبير Dart & Flutter
-                </h1>
-                <p class="subtitle">معلمك الذكي لتعلم Dart و Flutter باللغة العربية - مدعوم بـ Google Gemini 3 Flash</p>
-            </div>
-        </header>
-
-        <!-- Configuration Section -->
-        <section class="config-section" id="configSection">
-            <div class="card">
-                <h2 class="section-title">⚙️ الإعدادات الأولية</h2>
-                <p class="help-text">
-                    أدخل مفتاح Google API الخاص بك لبدء استخدام الخبير الذكي (Gemini 3 Flash)
-                    <br>
-                    <small>يمكنك الحصول على مفتاح من <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></small>
-                </p>
-                
-                <div class="form-group">
-                    <label for="apiKey">مفتاح Google API:</label>
-                    <input 
-                        type="password" 
-                        id="apiKey" 
-                        placeholder="AIza..." 
-                        class="input-field"
-                    >
-                    <button id="toggleApiKey" class="toggle-btn" title="إظهار/إخفاء">👁️</button>
-                </div>
-
-                <button id="saveBtn" class="btn btn-primary">
-                    💾 حفظ وتشغيل
+    <div id="appContainer" class="app-container">
+        <!-- Gemini-style Sidebar -->
+        <aside id="sidebar" class="gemini-sidebar">
+            <div class="sidebar-header">
+                <button id="sidebarToggle" class="icon-btn" data-i18n-title="toggle_sidebar">
+                    <span class="material-symbols-rounded">menu</span>
                 </button>
-                
-                <div id="statusMessage" class="status-message"></div>
-            </div>
-        </section>
-
-        <!-- Chat Section -->
-        <section class="chat-section" id="chatSection" style="display: none;">
-            <div class="card chat-card">
-                <div class="chat-header">
-                    <h2 class="section-title">💬 محادثة مع الخبير</h2>
-                    <div class="status-indicator">
-                        <span class="status-dot active"></span>
-                        <span>متصل</span>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <button class="quick-btn" data-action="explain">🎓 اشرح مفهوم</button>
-                    <button class="quick-btn" data-action="exercise">📝 أنشئ تمارين</button>
-                    <button class="quick-btn" data-action="analyze">🔍 حلل كود</button>
-                </div>
-
-                <!-- Chat Messages -->
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message assistant">
-                        <div class="message-content">
-                            <strong>مرحباً! 👋</strong>
-                            <p>أنا خبيرك في Dart و Flutter. يمكنني مساعدتك في:</p>
-                            <ul>
-                                <li>شرح المفاهيم البرمجية بالتفصيل</li>
-                                <li>تحليل ومراجعة الأكواد</li>
-                                <li>إنشاء تمارين عملية</li>
-                                <li>الإجابة على أسئلتك</li>
-                            </ul>
-                            <p><em>كيف يمكنني مساعدتك اليوم؟</em></p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Chat Input -->
-                <div class="chat-input-container">
-                    <textarea 
-                        id="chatInput" 
-                        placeholder="اكتب سؤالك هنا..."
-                        rows="3"
-                        class="chat-input"
-                    ></textarea>
-                    <button id="sendBtn" class="btn btn-send">
-                        ✈️ إرسال
+                <div class="new-chat-wrapper">
+                    <button id="railNewChatBtn" class="new-chat-btn">
+                        <span class="material-symbols-rounded">border_color</span>
+                        <span class="btn-label" data-i18n="new_chat">محادثة جديدة</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Sidebar with Tools -->
-            <div class="sidebar">
-                <div class="card sidebar-card">
-                    <h3 class="sidebar-title">🛠️ أدوات إضافية</h3>
-                    
-                    <div class="tool-section">
-                        <h4>📚 الوثائق</h4>
-                        <button id="refreshDocsBtn" class="btn btn-small btn-secondary">
-                            🔄 تحديث الوثائق
-                        </button>
-                        <p class="tool-info" id="docsInfo">
-                            <small>آخر تحديث: لم يتم التحديث بعد</small>
-                        </p>
-                    </div>
-
-                    <div class="tool-section">
-                        <h4>🗑️ الذاكرة المؤقتة</h4>
-                        <button id="clearCacheBtn" class="btn btn-small btn-secondary">
-                            مسح Cache
-                        </button>
-                        <p class="tool-info" id="cacheInfo">
-                            <small>الحجم: 0 MB</small>
-                        </p>
-                    </div>
-
-                    <div class="tool-section">
-                        <h4>ℹ️ الحالة</h4>
-                        <div class="status-info" id="systemStatus">
-                            <div class="status-item">
-                                <span>API:</span>
-                                <span id="apiStatus" class="status-value">✓</span>
-                            </div>
-                            <div class="status-item">
-                                <span>السياق:</span>
-                                <span id="contextStatus" class="status-value">⏳</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="sidebar-body">
+                <div class="history-section">
+                    <h3 class="section-label" data-i18n="history_label">المحفوظات</h3>
+                    <div id="historyList" class="history-list"></div>
                 </div>
             </div>
-        </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>بُني بـ ❤️ باستخدام Python, Flask & Google Gemini 3 Flash</p>
-        </footer>
+            <div class="sidebar-footer">
+                <button id="settingsBtn" class="footer-btn" data-i18n-title="settings_title">
+                    <span class="material-symbols-rounded">settings</span>
+                    <span class="btn-label" data-i18n="settings_title">الإعدادات</span>
+                </button>
+            </div>
+            
+            <div id="sidebarResizeHandle" class="resize-handle"></div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- M3 Linear Progress -->
+            <div id="topProgressBar" class="linear-progress" style="opacity: 0;">
+                <div class="progress-bar-indicator"></div>
+            </div>
+
+            <header class="app-header-container">
+                <div class="app-header floating-header">
+                    <div id="headerTitleArea" class="header-title-container">
+                        <span class="material-symbols-rounded" style="font-size: 20px; opacity: 0.6;">chat_bubble</span>
+                        <span id="headerChatTitle" class="header-chat-title" contenteditable="true" spellcheck="false">Darty</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="chat-container" id="chatMessages">
+                <!-- Chat content will be rendered here -->
+            </div>
+
+            <!-- Fixed Input Bar -->
+            <footer class="app-footer">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="chatInput" 
+                        placeholder="اكتب رسالتك لـ Darty..." 
+                        rows="1"
+                    ></textarea>
+                    <button id="stopBtn" class="stop-button" style="display: none;" data-i18n-title="stop_title">
+                        <span class="material-symbols-rounded">stop</span>
+                    </button>
+                    <button id="sendBtn" class="send-button" data-i18n-title="send_title">
+                        <span class="material-symbols-rounded">arrow_upward</span>
+                    </button>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- M3 Settings FAB Menu -->
+    <div id="settingsOverlay" class="settings-fab-menu">
+        <div class="fab-menu-items">
+            <button id="themeToggleBtnOverlay" class="mini-fab" data-i18n-title="theme_title">
+                <span id="themeIcon" class="material-symbols-rounded">light_mode</span>
+            </button>
+            <button id="langToggleBtnOverlay" class="mini-fab" data-i18n-title="lang_title">
+                <span id="langTextOverlay" style="font-size: 10px; font-weight: 900;">EN</span>
+            </button>
+            <button id="refreshDocsBtnOverlay" class="mini-fab" data-i18n-title="sync">
+                <span class="material-symbols-rounded">sync</span>
+            </button>
+            <button id="clearCacheBtnOverlay" class="mini-fab" data-i18n-title="clear">
+                <span class="material-symbols-rounded">delete</span>
+            </button>
+            <button id="closeSettingsBtn" class="mini-fab close-fab">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
     </div>
 
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
-        <p>جاري المعالجة...</p>
     </div>
 
     <script src="script.js"></script>

@@ -3,7 +3,7 @@ AI Tutor Module
 Integrates with Google Gemini API to provide expert tutoring in Arabic for absolute beginners
 """
 
-import google.generativeai as genai
+from google import genai
 from typing import Optional, List, Dict
 import json
 
@@ -59,18 +59,10 @@ class DartFlutterTutor:
             api_key: Google API key
             documentation_context: Optional context from scraped documentation
         """
-        genai.configure(api_key=AIzaSyAUZ7VaH2WpDv_PS_Wmi0hH_C4u8Dajbr8)
+        self.client = genai.Client(api_key=api_key)
         
         # Use Gemini 3 Flash model
-        self.model = genai.GenerativeModel(
-            model_name='gemini-2.0-flash-exp',
-            generation_config={
-                'temperature': 0.7,
-                'top_p': 0.95,
-                'top_k': 40,
-                'max_output_tokens': 8192,
-            }
-        )
+        self.model_name = 'gemini-3-flash-preview'
         
         self.documentation_context = documentation_context or ""
         self.chat_session = None
@@ -92,11 +84,25 @@ class DartFlutterTutor:
 """)
         
         # Start chat session
-        self.chat_session = self.model.start_chat(history=[])
-        
-        # Send system prompt as first message
+        # Note: The new SDK handles system prompts differently or as part of history/config
+        # We'll use a simple chat session approach
         try:
-            self.chat_session.send_message("\n".join(context_parts))
+            self.chat_session = self.client.chats.create(
+                model=self.model_name,
+                config={
+                    'temperature': 0.7,
+                    'top_p': 0.95,
+                    'max_output_tokens': 8192,
+                },
+                history=[
+                     # System prompt can be sent as the first user message or handled via specific API if supported
+                     # For now, we prepend it to the first interaction or rely on memory
+                ]
+            )
+            # Send system prompt to seed the context
+            initial_message = "\n".join(context_parts)
+            self.chat_session.send_message(initial_message)
+            
         except Exception as e:
             print(f"Error initializing chat: {e}")
     
@@ -111,17 +117,27 @@ class DartFlutterTutor:
         Returns:
             The tutor's response or None if failed
         """
-        try:
-            if not self.chat_session:
-                self._initialize_chat()
+        import time
+        for attempt in range(3):
+            try:
+                if not self.chat_session:
+                    self._initialize_chat()
+                
+                # Send message and get response
+                response = self.chat_session.send_message(question)
+                return response.text
             
-            # Send message and get response
-            response = self.chat_session.send_message(question)
-            return response.text
-        
-        except Exception as e:
-            print(f"Error calling Gemini API: {e}")
-            return f"عذراً، حدث خطأ أثناء معالجة سؤالك: {str(e)}"
+            except Exception as e:
+                error_msg = str(e)
+                if "503" in error_msg or "overloaded" in error_msg.lower():
+                    if attempt < 2:
+                        print(f"⚠️ Gemini is overloaded. Retrying in 2s (Attempt {attempt+1}/3)...")
+                        time.sleep(2)
+                        continue
+                
+                print(f"Error calling Gemini API: {e}")
+                return f"عذراً، Darty واجه ضغط كبير حالياً من سيرفرات جوجل. جرب بكرة أو استنى دقيقة وكرر سؤالك. (Error: {error_msg})"
+        return "عذراً، فشل الاتصال بـ Darty بعد عدة محاولات."
     
     def analyze_code(self, code: str) -> Optional[str]:
         """
