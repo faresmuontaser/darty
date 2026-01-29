@@ -9,9 +9,9 @@ import json
 
 
 class DartFlutterTutor:
-    """AI-powered Dart & Flutter expert tutor using Google Gemini"""
+    """AI-powered Dart & Flutter tutor (Darty) using Google Gemini"""
     
-    SYSTEM_PROMPT = """أنت معلم خبير في لغة Dart وإطار عمل Flutter، متخصص في تعليم المبتدئين تماماً (الذين لم يسبق لهم دراسة البرمجة).
+    SYSTEM_PROMPT = """أنت Darty (دارتي)، معلم وخبير في لغة Dart وإطار عمل Flutter، متخصص في تعليم المبتدئين تماماً (الذين لم يسبق لهم دراسة البرمجة).
 
 ## مهمتك:
 

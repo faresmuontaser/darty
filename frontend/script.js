@@ -344,10 +344,10 @@ function applyLanguage(lang) {
     elements.sidebar.setAttribute('dir', uiDir);
     document.querySelector('.app-header-container').setAttribute('dir', uiDir);
     document.querySelector('.app-footer').setAttribute('dir', uiDir);
+    elements.chatInput.setAttribute('dir', uiDir);
     
     // Elements that STAY RTL (Arabic content)
     elements.chatMessages.setAttribute('dir', 'rtl');
-    elements.chatInput.setAttribute('dir', 'rtl');
 
     renderHistory();
     

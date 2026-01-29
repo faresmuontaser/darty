@@ -160,7 +160,7 @@ def initialize_tutor():
     except Exception as e:
         return jsonify({
             'success': False,
-            'message': f'خطأ في تهيئة الخبير: {str(e)}'
+            'message': f'Darty واجه مشكلة في التشغيل: {str(e)}'
         }), 500
 
 
@@ -223,7 +223,7 @@ def analyze_code():
         if not tutor:
             return jsonify({
                 'success': False,
-                'message': 'لم يتم تهيئة الخبير'
+                'message': 'لم يتم تهيئة Darty'
             }), 400
         
         data = request.get_json()
@@ -269,7 +269,7 @@ def generate_exercises():
         if not tutor:
             return jsonify({
                 'success': False,
-                'message': 'لم يتم تهيئة الخبير'
+                'message': 'لم يتم تهيئة Darty'
             }), 400
         
         data = request.get_json()
@@ -315,7 +315,7 @@ def explain_concept():
         if not tutor:
             return jsonify({
                 'success': False,
-                'message': 'لم يتم تهيئة الخبير'
+                'message': 'لم يتم تهيئة Darty'
             }), 400
         
         data = request.get_json()
