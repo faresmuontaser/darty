@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خبير Dart & Flutter - مدعوم بـ Google Gemini</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="emoji">🎯</span>
+                    خبير Dart & Flutter
+                </h1>
+                <p class="subtitle">معلمك الذكي لتعلم Dart و Flutter باللغة العربية - مدعوم بـ Google Gemini 3 Flash</p>
+            </div>
+        </header>
+
+        <!-- Configuration Section -->
+        <section class="config-section" id="configSection">
+            <div class="card">
+                <h2 class="section-title">⚙️ الإعدادات الأولية</h2>
+                <p class="help-text">
+                    أدخل مفتاح Google API الخاص بك لبدء استخدام الخبير الذكي (Gemini 3 Flash)
+                    <br>
+                    <small>يمكنك الحصول على مفتاح من <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></small>
+                </p>
+                
+                <div class="form-group">
+                    <label for="apiKey">مفتاح Google API:</label>
+                    <input 
+                        type="password" 
+                        id="apiKey" 
+                        placeholder="AIza..." 
+                        class="input-field"
+                    >
+                    <button id="toggleApiKey" class="toggle-btn" title="إظهار/إخفاء">👁️</button>
+                </div>
+
+                <button id="saveBtn" class="btn btn-primary">
+                    💾 حفظ وتشغيل
+                </button>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+        </section>
+
+        <!-- Chat Section -->
+        <section class="chat-section" id="chatSection" style="display: none;">
+            <div class="card chat-card">
+                <div class="chat-header">
+                    <h2 class="section-title">💬 محادثة مع الخبير</h2>
+                    <div class="status-indicator">
+                        <span class="status-dot active"></span>
+                        <span>متصل</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="quick-btn" data-action="explain">🎓 اشرح مفهوم</button>
+                    <button class="quick-btn" data-action="exercise">📝 أنشئ تمارين</button>
+                    <button class="quick-btn" data-action="analyze">🔍 حلل كود</button>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant">
+                        <div class="message-content">
+                            <strong>مرحباً! 👋</strong>
+                            <p>أنا خبيرك في Dart و Flutter. يمكنني مساعدتك في:</p>
+                            <ul>
+                                <li>شرح المفاهيم البرمجية بالتفصيل</li>
+                                <li>تحليل ومراجعة الأكواد</li>
+                                <li>إنشاء تمارين عملية</li>
+                                <li>الإجابة على أسئلتك</li>
+                            </ul>
+                            <p><em>كيف يمكنني مساعدتك اليوم؟</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input-container">
+                    <textarea 
+                        id="chatInput" 
+                        placeholder="اكتب سؤالك هنا..."
+                        rows="3"
+                        class="chat-input"
+                    ></textarea>
+                    <button id="sendBtn" class="btn btn-send">
+                        ✈️ إرسال
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sidebar with Tools -->
+            <div class="sidebar">
+                <div class="card sidebar-card">
+                    <h3 class="sidebar-title">🛠️ أدوات إضافية</h3>
+                    
+                    <div class="tool-section">
+                        <h4>📚 الوثائق</h4>
+                        <button id="refreshDocsBtn" class="btn btn-small btn-secondary">
+                            🔄 تحديث الوثائق
+                        </button>
+                        <p class="tool-info" id="docsInfo">
+                            <small>آخر تحديث: لم يتم التحديث بعد</small>
+                        </p>
+                    </div>
+
+                    <div class="tool-section">
+                        <h4>🗑️ الذاكرة المؤقتة</h4>
+                        <button id="clearCacheBtn" class="btn btn-small btn-secondary">
+                            مسح Cache
+                        </button>
+                        <p class="tool-info" id="cacheInfo">
+                            <small>الحجم: 0 MB</small>
+                        </p>
+                    </div>
+
+                    <div class="tool-section">
+                        <h4>ℹ️ الحالة</h4>
+                        <div class="status-info" id="systemStatus">
+                            <div class="status-item">
+                                <span>API:</span>
+                                <span id="apiStatus" class="status-value">✓</span>
+                            </div>
+                            <div class="status-item">
+                                <span>السياق:</span>
+                                <span id="contextStatus" class="status-value">⏳</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>بُني بـ ❤️ باستخدام Python, Flask & Google Gemini 3 Flash</p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>جاري المعالجة...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
