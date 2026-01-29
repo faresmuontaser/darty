@@ -19,7 +19,9 @@ class ConfigManager:
         Args:
             config_dir: Directory to store configuration files
         """
-        self.config_dir = Path(config_dir)
+        # Use path relative to this file to ensure consistency regardless of CWD
+        base_path = Path(__file__).parent.absolute()
+        self.config_dir = base_path / config_dir
         self.config_file = self.config_dir / "config.json"
         self._ensure_config_dir()
     
